@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Repository;
 
@@ -12,7 +13,10 @@ public class RepositoryContextFactory : IDesignTimeDbContextFactory<RepositoryCo
         .SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json")
         .Build();
-        var builder = new DbContextOptionsBuilder<RepositoryContext>();
+
+        var builder = new DbContextOptionsBuilder<RepositoryContext>()
+            .UseSqlServer(configuration.GetConnectionString("sqlConnection"),
+            b => b.MigrationsAssembly("CompanyEmployees"));
         //.UseSqlServer(configuration.GetConnectionString("sqlConnection"));
         
         return new RepositoryContext(builder.Options);
