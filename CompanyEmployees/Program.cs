@@ -15,7 +15,9 @@ builder.Services.ConfigureLoggerService();
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+.AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -44,10 +46,10 @@ app.UseCors("CorsPolicy");
 
 app.UseAuthorization();
 
-app.Run(async context => 
-{
-    await context.Response.WriteAsync("Hello from the middleware component");
-});
+//app.Run(async context => 
+//{
+//    await context.Response.WriteAsync("Hello from the middleware component");
+//});
 
 app.MapControllers();
 
