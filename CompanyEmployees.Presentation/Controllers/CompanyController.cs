@@ -6,11 +6,11 @@ namespace CompanyEmployees.Presentation.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 
-public class CompaniesController : ControllerBase
+public class CompanyController : ControllerBase
 {
     private readonly IServiceManager _service;
 
-    public CompaniesController(IServiceManager service)
+    public CompanyController(IServiceManager service)
     {
         _service = service;
     }
@@ -28,5 +28,10 @@ public class CompaniesController : ControllerBase
         {
             return StatusCode(500, "Internal server error");
         }
-    }
+    }    [HttpGet("{id:guid}")]
+    public IActionResult GetCompany(Guid id)
+    {
+        var company = _service.CompanyService.GetCompany(id, trackChanges: false);
+        return Ok(company);
+    }
 }
