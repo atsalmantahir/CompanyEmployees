@@ -10,6 +10,10 @@ public class CompanyController : ControllerBase
 {
     private readonly IServiceManager _service;
 
+    /// <summary>
+    /// constructor
+    /// </summary>
+    /// <param name="service"></param>
     public CompanyController(IServiceManager service)
     {
         _service = service;
