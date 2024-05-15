@@ -15,6 +15,11 @@ public class CompanyController : ControllerBase
         _service = service;
     }
 
+    /// <summary>
+    /// get companies
+    /// </summary>
+    /// <returns></returns>
+
     [HttpGet]
     public IActionResult GetCompanies()
     {
@@ -28,7 +33,11 @@ public class CompanyController : ControllerBase
         {
             return StatusCode(500, "Internal server error");
         }
-    }    [HttpGet("{id:guid}")]
+    }    /// <summary>
+    /// get companies by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>    [HttpGet("{id:guid}")]
     public IActionResult GetCompany(Guid id)
     {
         var company = _service.CompanyService.GetCompany(id, trackChanges: false);
