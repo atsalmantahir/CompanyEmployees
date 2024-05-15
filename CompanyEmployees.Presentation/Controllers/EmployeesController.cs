@@ -18,6 +18,11 @@ public class EmployeesController : ControllerBase
         _service = service;
     }
 
+    /// <summary>
+    /// get employees by company
+    /// </summary>
+    /// <param name="companyId"></param>
+    /// <returns></returns>
     [HttpGet]
     public IActionResult GetEmployeesByCompany(Guid companyId) 
     {
