@@ -30,4 +30,17 @@ public class EmployeesController : ControllerBase
         return Ok(employees);
     }
 
+    /// <summary>
+    /// get employee by company
+    /// </summary>
+    /// <param name="companyId"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("{id:guid}")]
+    public IActionResult GetEmployeeForCompany(Guid companyId, Guid id)
+    {
+        var employee = _service.EmployeeService.GetEmployee(companyId, id,
+        trackChanges: false);
+        return Ok(employee);
+    }
 }

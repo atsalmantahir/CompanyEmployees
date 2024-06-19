@@ -43,7 +43,7 @@ internal sealed class CompanyService : ICompanyService
         //Check if the company is null 
         if (company is null) 
         {
-            throw new NotFoundException($"Company with id '{id}' not found");
+            throw new CompanyNotFoundException(id);
         }
 
         var companyDto = _mapper.Map<CompanyDto>(company);

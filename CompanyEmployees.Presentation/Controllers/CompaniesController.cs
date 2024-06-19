@@ -6,7 +6,7 @@ namespace CompanyEmployees.Presentation.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 
-public class CompanyController : ControllerBase
+public class CompaniesController : ControllerBase
 {
     private readonly IServiceManager _service;
 
@@ -14,7 +14,7 @@ public class CompanyController : ControllerBase
     /// constructor
     /// </summary>
     /// <param name="service"></param>
-    public CompanyController(IServiceManager service)
+    public CompaniesController(IServiceManager service)
     {
         _service = service;
     }
