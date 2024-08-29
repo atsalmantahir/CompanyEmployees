@@ -19,6 +19,8 @@ public class MappingProfiles : Profile
         CreateMap<Employee, EmployeeDto>();
 
         CreateMap<CompanyForCreationDTO, Company>();
+
+        CreateMap<EmployeeForCreationDto, Employee>();
     }
 
 }
