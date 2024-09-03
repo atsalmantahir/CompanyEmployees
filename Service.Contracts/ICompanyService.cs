@@ -11,4 +11,7 @@ public interface ICompanyService
 
     CompanyDto CreateCompany(CompanyForCreationDTO company);
 
+    (IEnumerable<CompanyDto> companies, string ids) CreateCompanyCollection(IEnumerable<CompanyForCreationDTO> companyCollection);
+
+
 }
