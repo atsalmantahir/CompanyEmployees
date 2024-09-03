@@ -38,11 +38,14 @@ public class CompaniesController : ControllerBase
         {
             return StatusCode(500, "Internal server error");
         }
-    }    /// <summary>
+    }
+
+    /// <summary>
     /// create company
     /// </summary>
     /// <param name="company"></param>
-    /// <returns></returns>    [HttpPost]
+    /// <returns></returns>
+    [HttpPost]
     public IActionResult CreateCompany([FromBody] CompanyForCreationDTO company)
     {
         if (company is null)
@@ -57,10 +60,13 @@ public class CompaniesController : ControllerBase
     /// get companies by id
     /// </summary>
     /// <param name="id"></param>
-    /// <returns></returns>    [HttpGet("{id:guid}", Name = "CompanyById")]
+    /// <returns></returns>
+    [HttpGet("{id:guid}", Name = "CompanyById")]
     public IActionResult GetCompany(Guid id)
     {
         var company = _service.CompanyService.GetCompany(id, trackChanges: false);
         return Ok(company);
-    }
+    }
+
+
 }
