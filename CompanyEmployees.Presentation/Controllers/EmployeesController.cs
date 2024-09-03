@@ -67,5 +67,16 @@ public class EmployeesController : ControllerBase
             id = employeeToReturn.Id
         },
         employeeToReturn);
+    }    /// <summary>
+    /// delete employee
+    /// </summary>
+    /// <param name="companyId"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>    [HttpDelete("{id:guid}")]
+    public IActionResult DeleteEmployeeForCompany(Guid companyId, Guid id)
+    {
+        _service.EmployeeService.DeleteEmployeeForCompany(companyId, id, trackChanges:
+        false);
+        return NoContent();
     }
 }
