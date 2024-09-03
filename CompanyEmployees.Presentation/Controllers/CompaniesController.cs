@@ -98,4 +98,16 @@ public class CompaniesController : ControllerBase
     }
 
 
+    /// <summary>
+    /// Delete company
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete("{id:guid}")]
+    public IActionResult DeleteCompany(Guid id)
+    {
+        _service.CompanyService.DeleteCompany(id, trackChanges: false);
+        return NoContent();
+    }
+
 }

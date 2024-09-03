@@ -12,4 +12,5 @@ public interface ICompanyRepository
 
     void CreateCompany(Company company);
 
+    void DeleteCompany(Company company);
 }
