@@ -69,6 +69,20 @@ public class CompaniesController : ControllerBase
         return Ok(companies);
     }
 
+    /// <summary>
+    /// Create company collection
+    /// </summary>
+    /// <param name="companyCollection"></param>
+    /// <returns></returns>
+    [HttpPost("collection")]
+    public IActionResult CreateCompanyCollection([FromBody] IEnumerable<CompanyForCreationDTO> companyCollection)
+    {
+        var result =
+        _service.CompanyService.CreateCompanyCollection(companyCollection);
+        return CreatedAtRoute("CompanyCollection", new { result.ids },
+        result.companies);
+    }
+
 
 
     /// <summary>

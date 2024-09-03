@@ -4,4 +4,4 @@ public record CompanyForCreationDTO(
     string Name, 
     string Address, 
     string Country,
-    IEnumerable<EmployeeForCreationDto> Employees);
+    IEnumerable<EmployeeForCreationDto>? Employees);
