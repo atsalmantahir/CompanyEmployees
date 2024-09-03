@@ -67,7 +67,7 @@ public class EmployeesController : ControllerBase
             id = employeeToReturn.Id
         },
         employeeToReturn);
-    }    /// <summary>
+    }    /// <summary>
     /// delete employee
     /// </summary>
     /// <param name="companyId"></param>
