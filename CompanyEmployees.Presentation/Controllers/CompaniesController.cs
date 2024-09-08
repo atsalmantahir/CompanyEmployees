@@ -110,4 +110,29 @@ public class CompaniesController : ControllerBase
         return NoContent();
     }
 
+
+    /// <summary>
+    /// update company
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="company"></param>
+    /// <returns></returns>
+    [HttpPut("{id:guid}")]
+    public IActionResult UpdateCompany(
+        Guid id, 
+        [FromBody] CompanyForUpdateDto company)
+    {
+        if (company is null)
+            return BadRequest("CompanyForUpdateDto object is null");
+
+        _service.CompanyService
+            .UpdateCompany(
+            id, 
+            company, 
+            trackChanges: true);
+
+        return NoContent();
+    }
+
+
 }
