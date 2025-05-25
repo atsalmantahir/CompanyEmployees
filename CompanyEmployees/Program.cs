@@ -1,5 +1,8 @@
 using CompanyEmployees.Extensions;
 using Contracts;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,8 +20,17 @@ builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureServiceManager();
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddControllers()
-.AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
+
+builder.Services
+    .AddControllers(config => 
+    {
+        config.RespectBrowserAcceptHeader = true;
+        config.ReturnHttpNotAcceptable = true;
+        config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
+    })
+    .AddCustomCSVFormatter()
+    .AddXmlDataContractSerializerFormatters()
+    .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -27,7 +39,7 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 var logger = app.Services.GetRequiredService<ILoggerManager>();
-app.ConfigureExceptionHandler();
+app.ConfigureExceptionHandler(logger);
 
 
 // Configure the HTTP request pipeline.
@@ -35,7 +47,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseDeveloperExceptionPage();
+    //app.UseDeveloperExceptionPage();
 }
 else 
 {
@@ -60,3 +72,21 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+
+
+static NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter()
+{
+    return new ServiceCollection()
+        .AddLogging()
+        .AddMvc()
+        .AddNewtonsoftJson()
+        .Services
+        .BuildServiceProvider()
+        .GetRequiredService<IOptions<MvcOptions>>()
+        .Value
+        .InputFormatters
+        .OfType<NewtonsoftJsonPatchInputFormatter>()
+        .First();
+}
