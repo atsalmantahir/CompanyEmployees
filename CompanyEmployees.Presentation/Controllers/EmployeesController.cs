@@ -68,24 +68,31 @@ public class EmployeesController : ControllerBase
             id = employeeToReturn.Id
         },
         employeeToReturn);
-    }    /// <summary>
+    }
+
+
+    /// <summary>
     /// delete employee
     /// </summary>
     /// <param name="companyId"></param>
     /// <param name="id"></param>
-    /// <returns></returns>    [HttpDelete("{id:guid}")]
+    /// <returns></returns>
+    [HttpDelete("{id:guid}")]
     public IActionResult DeleteEmployeeForCompany(Guid companyId, Guid id)
     {
         _service.EmployeeService.DeleteEmployeeForCompany(companyId, id, trackChanges:
         false);
         return NoContent();
-    }    /// <summary>
+    }
+
+    /// <summary>
     /// Update employee
     /// </summary>
     /// <param name="companyId"></param>
     /// <param name="id"></param>
     /// <param name="employee"></param>
-    /// <returns></returns>    [HttpPut("{id:guid}")]
+    /// <returns></returns>
+    [HttpPut("{id:guid}")]
     public IActionResult UpdateEmployeeForCompany(
         Guid companyId, 
         Guid id,
@@ -104,13 +111,15 @@ public class EmployeesController : ControllerBase
 
         return NoContent();
     }
-    /// <summary>
+
+    /// <summary>
     /// Patch employee
     /// </summary>
     /// <param name="companyId"></param>
     /// <param name="id"></param>
     /// <param name="patchDoc"></param>
-    /// <returns></returns>    [HttpPatch("{id:guid}")]
+    /// <returns></returns>
+    [HttpPatch("{id:guid}")]
     public IActionResult PartiallyUpdateEmployeeForCompany(
         Guid companyId, 
         Guid id, 
