@@ -1,4 +1,5 @@
 ﻿using CompanyEmployees.Formatters;
+using CompanyEmployees.Presentation.ActionFilters;
 using Contracts;
 using LoggerService;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ public static class ServiceExtensions
             .AllowAnyHeader());
         });
 
+
     public static void ConfigureIISIntegration(this IServiceCollection services) =>
         services.Configure<IISOptions>(options =>
         {
@@ -33,6 +35,11 @@ public static class ServiceExtensions
 
     public static void ConfigureServiceManager(this IServiceCollection services) =>
         services.AddScoped<IServiceManager, ServiceManager>();
+
+    public static void ConfigureActionFilter(this IServiceCollection services)
+    {
+        services.AddScoped<ValidationFilterAttribute>();
+    }
 
     public static void ConfigureSqlContext(this IServiceCollection services,
         IConfiguration configuration) =>
