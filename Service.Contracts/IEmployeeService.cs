@@ -5,32 +5,32 @@ namespace Service.Contracts;
 
 public interface IEmployeeService
 {
-    IEnumerable<EmployeeDto> GetEmployees(
+    Task<IEnumerable<EmployeeDto>> GetEmployees(
         Guid companyId, 
         bool trackChanges);
 
-    EmployeeDto GetEmployee(
+    Task<EmployeeDto> GetEmployee(
         Guid companyId, 
         Guid id, 
         bool trackChanges);
 
-    EmployeeDto CreateEmployeeForCompany(
+    Task<EmployeeDto> CreateEmployeeForCompany(
         Guid companyId, 
         EmployeeForCreationDto employeeForCreation, 
         bool trackChanges);
 
-    void DeleteEmployeeForCompany(
+    Task DeleteEmployeeForCompany(
         Guid companyId, 
         Guid id, 
         bool trackChanges);
 
-    void UpdateEmployeeForCompany(
+    Task UpdateEmployeeForCompany(
         Guid companyId, 
         Guid id,
         EmployeeForUpdateDto employeeForUpdate, 
         bool compTrackChanges, bool empTrackChanges);
 
-    (EmployeeForUpdateDto employeeToPatch, Employee employeeEntity) GetEmployeeForPatch(
+    Task<(EmployeeForUpdateDto employeeToPatch, Employee employeeEntity)> GetEmployeeForPatch(
         Guid companyId, 
         Guid id, 
         bool compTrackChanges, 
