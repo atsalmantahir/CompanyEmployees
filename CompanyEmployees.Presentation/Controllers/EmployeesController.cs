@@ -2,11 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CompanyEmployees.Presentation.Controllers;
 
@@ -26,9 +21,9 @@ public class EmployeesController : ControllerBase
     /// <param name="companyId"></param>
     /// <returns></returns>
     [HttpGet]
-    public IActionResult GetEmployeesByCompany(Guid companyId)
+    public async Task<IActionResult> GetEmployeesByCompany(Guid companyId)
     {
-        var employees = _service.EmployeeService.GetEmployees(companyId, trackChanges: false);
+        var employees = await _service.EmployeeService.GetEmployees(companyId, trackChanges: false);
         return Ok(employees);
     }
 
@@ -39,9 +34,9 @@ public class EmployeesController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("{id:guid}", Name = "GetEmployeeForCompany")]
-    public IActionResult GetEmployeeForCompany(Guid companyId, Guid id)
+    public async Task<IActionResult> GetEmployeeForCompany(Guid companyId, Guid id)
     {
-        var employee = _service.EmployeeService.GetEmployee(companyId, id,
+        var employee = await _service.EmployeeService.GetEmployee(companyId, id,
         trackChanges: false);
         return Ok(employee);
     }
@@ -53,7 +48,7 @@ public class EmployeesController : ControllerBase
     /// <param name="employee"></param>
     /// <returns></returns>
     [HttpPost]
-    public IActionResult CreateEmployeeForCompany(Guid companyId, [FromBody] EmployeeForCreationDto employee)
+    public async Task<IActionResult> CreateEmployeeForCompany(Guid companyId, [FromBody] EmployeeForCreationDto employee)
     {
         if (employee is null)
         {
@@ -65,7 +60,7 @@ public class EmployeesController : ControllerBase
             return UnprocessableEntity(ModelState);
         }
 
-        var employeeToReturn = _service.EmployeeService.CreateEmployeeForCompany(companyId, employee, trackChanges: false);
+        var employeeToReturn = await _service.EmployeeService.CreateEmployeeForCompany(companyId, employee, trackChanges: false);
 
         return CreatedAtRoute("GetEmployeeForCompany", new
         {
@@ -83,9 +78,9 @@ public class EmployeesController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("{id:guid}")]
-    public IActionResult DeleteEmployeeForCompany(Guid companyId, Guid id)
+    public async Task<IActionResult> DeleteEmployeeForCompany(Guid companyId, Guid id)
     {
-        _service.EmployeeService.DeleteEmployeeForCompany(companyId, id, trackChanges:
+        await _service.EmployeeService.DeleteEmployeeForCompany(companyId, id, trackChanges:
         false);
         return NoContent();
     }
@@ -98,7 +93,7 @@ public class EmployeesController : ControllerBase
     /// <param name="employee"></param>
     /// <returns></returns>
     [HttpPut("{id:guid}")]
-    public IActionResult UpdateEmployeeForCompany(
+    public async Task<IActionResult> UpdateEmployeeForCompany(
         Guid companyId, 
         Guid id,
         [FromBody] EmployeeForUpdateDto employee)
@@ -111,7 +106,7 @@ public class EmployeesController : ControllerBase
             return UnprocessableEntity(ModelState);
         }
 
-        _service.EmployeeService
+        await _service.EmployeeService
             .UpdateEmployeeForCompany(
             companyId, 
             id, 
@@ -130,7 +125,7 @@ public class EmployeesController : ControllerBase
     /// <param name="patchDoc"></param>
     /// <returns></returns>
     [HttpPatch("{id:guid}")]
-    public IActionResult PartiallyUpdateEmployeeForCompany(
+    public async Task<IActionResult> PartiallyUpdateEmployeeForCompany(
         Guid companyId, 
         Guid id, 
         [FromBody] JsonPatchDocument<EmployeeForUpdateDto> patchDoc)
@@ -138,7 +133,7 @@ public class EmployeesController : ControllerBase
         if (patchDoc is null)
             return BadRequest("patchDoc object sent from client is null.");
 
-        var result = _service.EmployeeService
+        var result = await _service.EmployeeService
             .GetEmployeeForPatch(companyId, id, compTrackChanges: false, empTrackChanges: true);
 
         patchDoc.ApplyTo(result.employeeToPatch, ModelState);
