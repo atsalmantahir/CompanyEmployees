@@ -131,6 +131,4 @@ public class CompaniesController : ControllerBase
 
         return NoContent();
     }
-
-
 }
