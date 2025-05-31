@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Service.Contracts;
 using Shared.DataTransferObjects;
+using Shared.RequestFeatures;
+using System.Text.Json;
 
 namespace CompanyEmployees.Presentation.Controllers;
 
@@ -21,10 +23,12 @@ public class EmployeesController : ControllerBase
     /// <param name="companyId"></param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<IActionResult> GetEmployeesByCompany(Guid companyId)
+    public async Task<IActionResult> GetEmployeesForCompany(Guid companyId, [FromQuery] EmployeeParameters employeeParameters)
     {
-        var employees = await _service.EmployeeService.GetEmployees(companyId, trackChanges: false);
-        return Ok(employees);
+        var pagedResult = await _service.EmployeeService.GetEmployeesAsync(companyId, employeeParameters, trackChanges: false);
+
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedResult.metaData));
+        return Ok(pagedResult.employees);
     }
 
     /// <summary>
@@ -36,7 +40,7 @@ public class EmployeesController : ControllerBase
     [HttpGet("{id:guid}", Name = "GetEmployeeForCompany")]
     public async Task<IActionResult> GetEmployeeForCompany(Guid companyId, Guid id)
     {
-        var employee = await _service.EmployeeService.GetEmployee(companyId, id,
+        var employee = await _service.EmployeeService.GetEmployeeAsync(companyId, id,
         trackChanges: false);
         return Ok(employee);
     }
@@ -60,7 +64,7 @@ public class EmployeesController : ControllerBase
             return UnprocessableEntity(ModelState);
         }
 
-        var employeeToReturn = await _service.EmployeeService.CreateEmployeeForCompany(companyId, employee, trackChanges: false);
+        var employeeToReturn = await _service.EmployeeService.CreateEmployeeForCompanyAsync(companyId, employee, trackChanges: false);
 
         return CreatedAtRoute("GetEmployeeForCompany", new
         {
@@ -80,7 +84,7 @@ public class EmployeesController : ControllerBase
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteEmployeeForCompany(Guid companyId, Guid id)
     {
-        await _service.EmployeeService.DeleteEmployeeForCompany(companyId, id, trackChanges:
+        await _service.EmployeeService.DeleteEmployeeForCompanyAsync(companyId, id, trackChanges:
         false);
         return NoContent();
     }
@@ -107,7 +111,7 @@ public class EmployeesController : ControllerBase
         }
 
         await _service.EmployeeService
-            .UpdateEmployeeForCompany(
+            .UpdateEmployeeForCompanyAsync(
             companyId, 
             id, 
             employee, 
@@ -134,7 +138,7 @@ public class EmployeesController : ControllerBase
             return BadRequest("patchDoc object sent from client is null.");
 
         var result = await _service.EmployeeService
-            .GetEmployeeForPatch(companyId, id, compTrackChanges: false, empTrackChanges: true);
+            .GetEmployeeForPatchAsync(companyId, id, compTrackChanges: false, empTrackChanges: true);
 
         patchDoc.ApplyTo(result.employeeToPatch, ModelState);
 
