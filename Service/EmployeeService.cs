@@ -37,7 +37,9 @@ internal sealed class EmployeeService : IEmployeeService
         var employee = _mapper.Map<EmployeeDto>(employeeDb);
 
         return employee;
-    }    public EmployeeDto CreateEmployeeForCompany(Guid companyId, EmployeeForCreationDto employeeForCreation, bool trackChanges)
+    }
+
+    public EmployeeDto CreateEmployeeForCompany(Guid companyId, EmployeeForCreationDto employeeForCreation, bool trackChanges)
     {
         _ = _repository.Company.GetCompanyAsync(companyId, trackChanges) ?? throw new CompanyNotFoundException(companyId);
         var employeeEntity = _mapper.Map<Employee>(employeeForCreation);
@@ -59,7 +61,9 @@ internal sealed class EmployeeService : IEmployeeService
             throw new EmployeeNotFoundException(id);
         _repository.Employee.DeleteEmployee(employeeForCompany);
         _repository.SaveAsync();
-    }    public void UpdateEmployeeForCompany(
+    }
+
+    public void UpdateEmployeeForCompany(
         Guid companyId,
         Guid id,
         EmployeeForUpdateDto employeeForUpdate,
@@ -74,7 +78,9 @@ internal sealed class EmployeeService : IEmployeeService
 
         _mapper.Map(employeeForUpdate, employeeEntity);
         _repository.SaveAsync();
-    }    public (EmployeeForUpdateDto employeeToPatch, Employee employeeEntity) GetEmployeeForPatch (
+    }
+
+    public (EmployeeForUpdateDto employeeToPatch, Employee employeeEntity) GetEmployeeForPatch (
         Guid companyId, 
         Guid id, 
         bool compTrackChanges, 
