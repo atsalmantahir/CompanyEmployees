@@ -1,11 +1,19 @@
 using CompanyEmployees.Extensions;
 using Contracts;
-using Microsoft.AspNetCore.Mvc.Formatters;
+using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Options;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
 using NLog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var modelBuilder = new ODataConventionModelBuilder();
+modelBuilder.EntityType<Company>();
+modelBuilder.EntityType<Employee>();
 
 LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(),
 "/nlog.config"));
@@ -30,7 +38,10 @@ builder.Services
     })
     .AddCustomCSVFormatter()
     .AddXmlDataContractSerializerFormatters()
-    .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
+    .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly)
+    .AddOData(options => options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(null).AddRouteComponents(
+        "odata",
+        GetEdmModel()));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -73,7 +84,12 @@ app.MapControllers();
 
 app.Run();
 
-
+static IEdmModel GetEdmModel()
+{
+    var builder = new ODataConventionModelBuilder();
+    builder.EntitySet<Company>(nameof(Company));
+    return builder.GetEdmModel();
+}
 
 
 static NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter()

@@ -1,6 +1,7 @@
 ﻿using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Presentation.ModelBinders;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using Service.Contracts;
 using Shared.DataTransferObjects;
 
@@ -28,6 +29,7 @@ public class CompaniesController : ControllerBase
     /// <returns></returns>
 
     [HttpGet]
+    [EnableQuery]
     public async Task<IActionResult> GetCompanies()
     {
         try
